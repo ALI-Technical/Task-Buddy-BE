@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import { VercelRequest, VercelResponse } from "@vercel/node/dist"
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -51,3 +52,7 @@ const PORT: number = Number(process.env.PORT) || 5000;
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  (app as any).handle(req, res);
+}

@@ -5,7 +5,6 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import { Server } from "socket.io";
 import { createServer } from "http";
 import mongoose from "mongoose";
 import { initSocket } from "./Config/socket";

@@ -5,6 +5,7 @@ interface ITask extends Document {
   title: string;
   description: string;
   completed: boolean;
+  reminder: boolean;
 }
 
 const TaskModel = new Schema<ITask>(
@@ -13,6 +14,7 @@ const TaskModel = new Schema<ITask>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     completed: { type: Boolean, default: false },
+    reminder: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

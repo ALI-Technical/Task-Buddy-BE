@@ -7,15 +7,16 @@ const JWT_SECRET =
   "5as4d4a56465HGHJBASBHJ56458YYGHJHJGHGioasoioi56456";
 
 export const registerUser = async (
+  fullName: string,
   email: string,
   password: string,
-  role: "user" | "admin"
+  role: "user" | "admin",
 ) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) throw new Error("User already exists");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ email, password: hashedPassword, role });
+  const newUser = await User.create({ fullName, email, password: hashedPassword, role });
 
   return newUser;
 };

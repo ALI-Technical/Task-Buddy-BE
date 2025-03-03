@@ -33,7 +33,7 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     await newTask.save();
 
     // Emit event to admins when a new task is created
-    io.emit("newTask", { newTask });
+    io.emit("newTask", newTask);
 
     res.status(201).json(newTask);
   } catch (error) {
@@ -61,7 +61,58 @@ export const updateTask = async (
     await task.save();
 
     // Emit event to admins when a task is updated
-    io.emit("taskUpdated", { task });
+    io.emit("taskUpdated", task);
+
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Delete a task
+export const deleteTask = async (
+  req: AuthRequest,
+  res: Response
+): Promise<any> => {
+  try {
+    const { taskId } = req.params;
+    const userId = req.user.userId;
+
+    const task = await Task.findOneAndDelete({ _id: taskId, userId });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Emit event to notify all admins about task deletion
+    io.emit("taskDeleted", taskId);
+
+    res.json({ message: "Task deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Change task status (Completed / Pending)
+export const changeTaskStatus = async (
+  req: AuthRequest,
+  res: Response
+): Promise<any> => {
+  try {
+    const { taskId } = req.params;
+    const userId = req.user.userId;
+    const { completed } = req.body;
+
+    const task = await Task.findOne({ _id: taskId, userId, reminder: false });
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    task.completed = completed;
+    await task.save();
+
+    // Emit event to notify all admins about task status change
+    io.emit("taskStatusChanged", { taskId, completed });
 
     res.json(task);
   } catch (error) {

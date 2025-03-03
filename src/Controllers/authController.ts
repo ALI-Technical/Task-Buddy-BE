@@ -3,12 +3,12 @@ import { Request, Response } from "express";
 
 export const handleRegisterUser = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { email, password, role } = req.body;
+    const { fullName, email, password, role } = req.body;
     if (!email || !password)
       return res.status(400).json({ message: "Missing fields" });
 
-    const user = await registerUser(email, password, role || "user");
-    res.status(201).json({ message: "User registered", user });
+    const user = await registerUser(fullName, email, password, role || "user");
+    res.status(201).json({ message: "User registered"});
   } catch (err: any) {
     res.status(400).json({ message: err.message });
   }

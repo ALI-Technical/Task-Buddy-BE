@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import { VercelRequest, VercelResponse } from "@vercel/node/dist"
+import { VercelRequest, VercelResponse } from "@vercel/node/dist";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import { initSocket } from "./Config/socket";
 import authRoutes from "./Routes/authRoutes";
 import taskRoutes from "./Routes/taskRoutes";
+import { startTaskReminderCronJob } from "./Services/taskReminder";
 
 // Load environment variables
 dotenv.config();
@@ -36,7 +37,10 @@ app.use(cookieParser());
 // Database Connection
 mongoose
   .connect(process.env.MONGO_URI as string)
-  .then(() => console.log("MongoDB Connected"))
+  .then(() => {
+    console.log("MongoDB Connected");
+    startTaskReminderCronJob();
+  })
   .catch((err) => console.error(err));
 
 // Routes

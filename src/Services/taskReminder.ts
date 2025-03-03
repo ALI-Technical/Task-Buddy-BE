@@ -5,8 +5,8 @@ import { io } from "../Config/socket";
 
 // Function to start the cron job
 export const startTaskReminderCronJob = () => {
-  // Schedule the job to run every day at 8:00 AM server time.
-  cron.schedule("10 * * * * *", async () => {
+  // Schedule the job to run every day at 2:00 PM server time.
+  cron.schedule("0 14 * * *", async () => {
     console.log(
       `Running task reminder cron job at ${new Date().toTimeString()}...`
     );

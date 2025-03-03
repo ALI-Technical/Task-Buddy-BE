@@ -14,7 +14,7 @@ export const initSocket = (httpServer: HttpServer) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected:", socket.id);
+    // console.log("A user connected:", socket.id);
 
     socket.on("disconnect", () => {
       adminSockets.delete(socket.id);
